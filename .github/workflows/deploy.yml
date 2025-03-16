@@ -3,47 +3,32 @@ name: Deploy to Hostinger
 on:
   push:
     branches:
-      - main  
+      - main  # Se ejecutará cuando hagas push a `main`
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout código fuente
+      - name: 🚀 Checkout código fuente
         uses: actions/checkout@v3
 
-      - name: Instalar dependencias
+      - name: 📦 Instalar dependencias
         run: npm install
 
-      - name: Construir la aplicación
-        run: npm run build 
-
-      - name: 📤 Verificar clave SSH
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | wc -l
-
-      - name: 📤 Crear clave SSH temporal
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
-
+      - name: 🔨 Construir la aplicación
+        run: npm run build
 
       - name: 🔍 Verificar archivos en `out/`
         run: ls -la out/
 
+      - name: 📤 Configurar conexión SSH con Hostinger
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.FTP_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Subir archivos a Hostinger (FTP)
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.FTP_PORT }}
-          source: "out/*"
-          target: "/public_html"
-          overwrite: true  # Solo reemplaza los archivos modificados
-          strip_components: 1  # Evita crear subcarpetas innecesarias
-          strip_components: 0  # Nos aseguramos de no perder la estructura
-      - name: 🔍 Verificar archivos en Hostinger después del deploy
-        run: ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.FTP_USERNAME }}@${{ secrets.FTP_HOST }} "ls -la /public_html"
-      
-      -  debug: true  # ⚠️ Agrega esto para ver qué está haciendo el script
-# 🔍 Debug: Verificar si los archivos están en el servidor después de subirlos
-      
+      - name: 📤 Subir archivos a Hostinger con `rsync`
+        run: rsync -avz -e "ssh -i ~/.ssh/id_rsa" out/ ${{ secrets.FTP_USERNAME }}@${{ secrets.FTP_HOST }}:/public_html
+
