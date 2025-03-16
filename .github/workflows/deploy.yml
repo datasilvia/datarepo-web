@@ -18,6 +18,13 @@ jobs:
       - name: Construir la aplicación
         run: npm run build 
 
+      - name: 📤 Verificar clave SSH
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | wc -l
+
+      - name: 📤 Crear clave SSH temporal
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
+
+
       - name: Subir archivos a Hostinger (FTP)
         uses: appleboy/scp-action@master
         with:
