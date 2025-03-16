@@ -40,7 +40,10 @@ jobs:
           target: "/public_html"
           overwrite: true  # Solo reemplaza los archivos modificados
           strip_components: 1  # Evita crear subcarpetas innecesarias
-
-# 🔍 Debug: Verificar si los archivos están en el servidor después de subirlos
+          strip_components: 0  # Nos aseguramos de no perder la estructura
       - name: 🔍 Verificar archivos en Hostinger después del deploy
         run: ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.FTP_USERNAME }}@${{ secrets.FTP_HOST }} "ls -la /public_html"
+      
+      -  debug: true  # ⚠️ Agrega esto para ver qué está haciendo el script
+# 🔍 Debug: Verificar si los archivos están en el servidor después de subirlos
+      
