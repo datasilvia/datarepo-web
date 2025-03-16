@@ -28,4 +28,4 @@ jobs:
           chmod 600 id_rsa
 
       - name: 📤 Subir archivos a Hostinger con `rsync`
-        run: rsync -avz -e "ssh -o StrictHostKeyChecking=no -i id_rsa" out/ ${{ secrets.FTP_USERNAME }}@${{ secrets.FTP_HOST }}:/public_html
+        run: rsync -avz -e "ssh -p 65002 -o StrictHostKeyChecking=no -i id_rsa" out/ ${{ secrets.FTP_USERNAME }}@${{ secrets.FTP_HOST }}:/public_html
