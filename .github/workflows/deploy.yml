@@ -22,10 +22,10 @@ jobs:
       - name: 🔍 Verificar archivos en `out/`
         run: ls -la out/
 
-      - name: 📤 Configurar clave SSH
+      - name: Configurar clave SSH
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > id_rsa
           chmod 600 id_rsa
 
       - name: 📤 Subir archivos a Hostinger con `rsync`
-        run: rsync -avz -e "ssh -p 65002 -o StrictHostKeyChecking=no -i id_rsa" out/ ${{ secrets.FTP_USERNAME }}@${{ secrets.FTP_HOST }}:/public_html
+        run: rsync -avz -e "ssh -p 65002 -o StrictHostKeyChecking=no -i id_rsa" out/ ${{ secrets.FTP_USERNAME }}@${{ secrets.FTP_HOST }}:/home/u113066265/domains/datarepo.es/public_html/
