@@ -23,8 +23,7 @@ jobs:
         with:
           host: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.FTP_PORT }}
-          protocol: "sftp" 
           source: "./out/*"
           target: "/public_html"
