@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function Page() {
   return (
     <main className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-center p-6">
-      
+
       {/* Botón de modo oscuro */}
       <ThemeToggle />
 
@@ -26,6 +26,22 @@ export default function Page() {
       >
         Contribuir en GitHub
       </Link>
+
+      <Link
+        href="/about"
+        className="mt-4 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+      >
+        Sobre el proyecto →
+      </Link>
+
+      <Link
+        href="/contribuir"
+        className="mt-2 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+      >
+        Cómo contribuir →
+      </Link>
+
+
 
       {/* Componente con tarjetas y filtro */}
       <div className="mt-12 w-full">
